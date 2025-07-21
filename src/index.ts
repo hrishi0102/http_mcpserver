@@ -5,10 +5,13 @@ import { z } from "zod";
 
 // Helper function to create a new server instance (for stateless mode)
 function createServer() {
-  const server = new McpServer({
-    name: "bmi-calculator-server",
-    version: "1.0.0",
-  });
+  const server = new McpServer(
+    {
+      name: "bmi-calculator-server",
+      version: "1.0.0",
+    },
+    { capabilities: { logging: {} } }
+  );
 
   // Register BMI calculator tool
   server.registerTool(
@@ -48,7 +51,6 @@ app.post("/mcp", async (req, res) => {
   try {
     // Create a new server and transport instance for each request (stateless)
     const server = createServer();
-    console.log("Server created");
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined, // No session management
     });
@@ -61,13 +63,9 @@ app.post("/mcp", async (req, res) => {
     });
 
     // Connect server to transport
-    console.log("Connecting server to transport");
     await server.connect(transport);
-    console.log("Server connected");
     // Handle the request
-    console.log("Handling request");
     await transport.handleRequest(req, res, req.body);
-    console.log("Request handled");
   } catch (error) {
     console.error("Error handling MCP request:", error);
     if (!res.headersSent) {
