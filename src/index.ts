@@ -48,22 +48,26 @@ app.post("/mcp", async (req, res) => {
   try {
     // Create a new server and transport instance for each request (stateless)
     const server = createServer();
+    console.log("Server created");
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined, // No session management
     });
 
     // Clean up when request closes
     res.on("close", () => {
-      console.log("Request closed");
+      console.log("Request closed, closing transport and server");
       transport.close();
       server.close();
     });
 
     // Connect server to transport
+    console.log("Connecting server to transport");
     await server.connect(transport);
-
+    console.log("Server connected");
     // Handle the request
+    console.log("Handling request");
     await transport.handleRequest(req, res, req.body);
+    console.log("Request handled");
   } catch (error) {
     console.error("Error handling MCP request:", error);
     if (!res.headersSent) {
