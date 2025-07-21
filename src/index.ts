@@ -55,17 +55,16 @@ app.post("/mcp", async (req, res) => {
       sessionIdGenerator: undefined, // No session management
     });
 
+    // Connect server to transport
+    await server.connect(transport);
+    // Handle the request
+    await transport.handleRequest(req, res, req.body);
     // Clean up when request closes
     res.on("close", () => {
       console.log("Request closed, closing transport and server");
       transport.close();
       server.close();
     });
-
-    // Connect server to transport
-    await server.connect(transport);
-    // Handle the request
-    await transport.handleRequest(req, res, req.body);
   } catch (error) {
     console.error("Error handling MCP request:", error);
     if (!res.headersSent) {
