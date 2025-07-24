@@ -1,0 +1,44 @@
+1. Initialize
+curl --location 'https://http-mcpserver.onrender.com/mcp' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Accept: text/event-stream' \
+--data '{
+    "jsonrpc": "2.0",
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2025-03-26",
+      "capabilities": {},
+      "clientInfo": {"name": "test-client", "version": "1.0.0"}
+    },
+    "id": 1
+  }'
+
+2. List Tool
+curl --location 'https://http-mcpserver.onrender.com/mcp' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Accept: text/event-stream' \
+--data '{
+  "jsonrpc": "2.0",
+  "method": "tools/list",
+  "id": 2
+}'
+
+3. Call Tool
+curl --location 'https://http-mcpserver.onrender.com/mcp' \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--header 'Accept: text/event-stream' \
+--data '{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "calculate-bmi",
+    "arguments": {
+      "weightKg": 70,
+      "heightM": 1.75
+    }
+  },
+  "id": 3
+}'
